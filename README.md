@@ -41,16 +41,7 @@ pip install -e .
 ```bash
 dfs evaluate <модуль> <входной_файл> <файл_результата> <метод> [доп. аргументы] (-p [точность])
 ```
-По умолчанию, точность p=2.
-
-Примеры:
-
-```bash
-dfs evaluate complete input/complete/example.json results/example.json pessimism
-dfs evaluate complete input/ex.json results/ex1.json general_solution 0.5
-dfs evaluate stochastic input/stochastic/problem_10_3.json results/stochastic/problem_10_3.json problem_10_3
-dfs evaluate partial input/partial/reference_3x4.json results/partial/wald.json wald_criterion 4
-```
+По умолчанию, точность p=2. Примеры смотрите далее.
 
 ### Режим проверки (validate)
 
@@ -58,7 +49,7 @@ dfs evaluate partial input/partial/reference_3x4.json results/partial/wald.json 
 dfs validate <модуль> <входной_файл> <эталонный_файл> <метод> [доп. аргументы]
 ```
 
-Эталонные файлы лежат в каталоге **`validate/`**. Команда завершится успехом, если результат метода совпадает с эталоном (с учётом точности для вещественных полей).
+Эталонные файлы лежат в каталоге **`validate/`**. Команда завершится успехом, если результат метода совпадает с эталоном (с учётом точности для вещественных полей). Примеры находятся в скрипте bash проекта.
 
 ### Автодополнение (Linux terminal)
 
@@ -210,5 +201,3 @@ result = solution(data, pessimism)
 теория и методы анализа : учебник для вузов / В. В. Подиновский. – Москва :
 Изд-во Юрайт, 2025. – 486 с.
 2. Taghavifard, M. T. Decision making under uncertain and risky situations / M. T. Taghavifard, K. Khalili Damghani, R. Tavakkoli Moghaddam // Society of Actuaries. – 2009. – P. 1-31.
-
-Контрольные примеры из учебника Подиновского распространяются лицензией учебника
