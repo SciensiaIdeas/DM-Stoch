@@ -103,7 +103,7 @@ result = solution(data, pessimism)
 
 ---
 
-## Решение задач*`
+## Решение задач
 
 ### `algs_complete_uncertainty.py` (полная неопределённость)
 
