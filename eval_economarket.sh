@@ -10,6 +10,6 @@ dfs evaluate stochastic input/stochastic/economarket_modified.json  results/stoc
 dfs evaluate partial input/partial/economarket.json results/partial/economarket_fishburn.json fishburn
 dfs evaluate partial input/partial/economarket.json results/partial/economarket_kirkwood.json kirkwood
 
-# Критерии Вальда и Бернулли-Лапласа при группе [1,4]
-dfs evaluate partial input/partial/economarket.json results/partial/economarket_wald.json wald_criterion "[1,4]"
-dfs evaluate partial input/partial/economarket.json results/partial/economarket_bernlap.json bernoulli_laplace_criterion "[1,4]"
+# Критерии Вальда и Бернулли-Лапласа при группе [4]
+dfs evaluate partial input/partial/economarket.json results/partial/economarket_wald.json wald_criterion "[4]"
+dfs evaluate partial input/partial/economarket.json results/partial/economarket_bernlap.json bernoulli_laplace_criterion "[4]"
