@@ -149,6 +149,39 @@ result = solution(data, pessimism)
 
 ---
 
+## Входные и выходные данные (schemas.py)
+
+Все форматы входных и выходных JSON заданы в модуле **`schemas.py`** с помощью Pydantic-моделей. Ниже перечислены структуры по типам задач.
+
+### Стохастическая неопределённость
+
+| Модель | Назначение | Поля |
+|--------|------------|------|
+| **Problem10_3Input** | Вход для задачи 10.3 («Русский сыр») | `demand` — список объёмов спроса; `demand_probs` — вероятности; `cost`, `price` — себестоимость и цена; `n_values` — варианты производства |
+| **Problem10_3Result** | Результат `problem_10_3` | `payoff_table` — матрица прибыли; `results`, `ranked` — стратегии с \(m\), \(s^-\); `dominance_m_s`, `fsd_dominance`, `ssd_dominance`; `best_candidates`, `dominance_type`; `cdf_table` |
+| **MultiCriteriaInput** | Вход многокритериальной задачи с притязаниями | `alternatives`, `states_of_nature`, `state_probabilities`; `criteria_values` — словарь «альтернатива → матрица значений по состояниям»; `aspiration_levels`; опционально `minimize_criteria`, `criteria_descriptions` |
+| **MultiCriteriaResult** | Результат `multi_criteria_problem` | `results` — вероятность успеха по альтернативам; `best_variant`; `sorted_results` — список пар (альтернатива, вероятность) |
+
+### Полная неопределённость
+
+| Модель | Назначение | Поля |
+|--------|------------|------|
+| **CompleteUncertaintyInput** | Вход для всех критериев полной неопр. | `M` — матрица выигрышей (список списков чисел), размер «альтернативы × состояния» |
+| **CompleteUncertaintyResult** | Результат одного критерия (Вальд, Гурвиц, …) | `measures` — вектор мер по стратегиям (от лучшей к худшей по предпочтению см. ranks); `ranks` — ранги (от лучшей к худшей, нумерация начинается с 1); `best_variant` — номер лучшей альтернативы (ranks[0]) |
+| **AllCompleteMethodsResult** | Результат `general_solution` | Шесть полей: `pessimism`, `optimism`, `hurwich`, `savage`, `bernulli_laplace`, `maximum_likelihood`, каждое — `CompleteUncertaintyResult` |
+
+### Частичная неопределённость
+
+| Модель | Назначение | Поля |
+|--------|------------|------|
+| **PartialUncertaintyInput** | Вход для Fishburn, Kirkwood, Вальда, Бернулли–Лапласа | `criteria_matrix` — 2D (альтернативы × состояния) или 3D (× критерии); опционально `utility_expression` — строка функции полезности (y1, y2, …) |
+| **WaldResult** | Результат `wald_criterion` | `optimal_alternative`; `min_values` — минимальные ожидания по вершинам; `n_alternatives`, `n_states`, `groups` |
+| **BernoulliLaplaceResult** | Результат `bernoulli_laplace_criterion` | `optimal_alternative`; `expected_values`; `n_alternatives`, `n_states`, `groups` |
+
+Для попарного доминирования (**fishburn**, **kirkwood**) выход — тот же **CompleteUncertaintyResult** (меры = счёт доминирований, ранги, лучшая альтернатива).
+
+---
+
 ## Структура проекта (кратко)
 
 | Каталог / файл | Назначение |
@@ -184,39 +217,6 @@ result = solution(data, pessimism)
 Программа открыта для использования и распространяется под лицензией MIT.
 
 Контрольные примеры из учебника Подиновского распространяются лицензией учебника
-
----
-
-## Входные и выходные данные (Pydantic-структуры из `schemas.py`)
-
-Все форматы входных и выходных JSON заданы в модуле **`schemas.py`** с помощью Pydantic-моделей. Ниже перечислены структуры по типам задач.
-
-### Стохастическая неопределённость
-
-| Модель | Назначение | Поля |
-|--------|------------|------|
-| **Problem10_3Input** | Вход для задачи 10.3 («Русский сыр») | `demand` — список объёмов спроса; `demand_probs` — вероятности; `cost`, `price` — себестоимость и цена; `n_values` — варианты производства |
-| **Problem10_3Result** | Результат `problem_10_3` | `payoff_table` — матрица прибыли; `results`, `ranked` — стратегии с \(m\), \(s^-\); `dominance_m_s`, `fsd_dominance`, `ssd_dominance`; `best_candidates`, `dominance_type`; `cdf_table` |
-| **MultiCriteriaInput** | Вход многокритериальной задачи с притязаниями | `alternatives`, `states_of_nature`, `state_probabilities`; `criteria_values` — словарь «альтернатива → матрица значений по состояниям»; `aspiration_levels`; опционально `minimize_criteria`, `criteria_descriptions` |
-| **MultiCriteriaResult** | Результат `multi_criteria_problem` | `results` — вероятность успеха по альтернативам; `best_variant`; `sorted_results` — список пар (альтернатива, вероятность) |
-
-### Полная неопределённость
-
-| Модель | Назначение | Поля |
-|--------|------------|------|
-| **CompleteUncertaintyInput** | Вход для всех критериев полной неопр. | `M` — матрица выигрышей (список списков чисел), размер «альтернативы × состояния» |
-| **CompleteUncertaintyResult** | Результат одного критерия (Вальд, Гурвиц, …) | `measures` — вектор мер по стратегиям (от лучшей к худшей по предпочтению см. ranks); `ranks` — ранги (от лучшей к худшей, нумерация начинается с 1); `best_variant` — номер лучшей альтернативы (ranks[0]) |
-| **AllCompleteMethodsResult** | Результат `general_solution` | Шесть полей: `pessimism`, `optimism`, `hurwich`, `savage`, `bernulli_laplace`, `maximum_likelihood`, каждое — `CompleteUncertaintyResult` |
-
-### Частичная неопределённость
-
-| Модель | Назначение | Поля |
-|--------|------------|------|
-| **PartialUncertaintyInput** | Вход для Fishburn, Kirkwood, Вальда, Бернулли–Лапласа | `criteria_matrix` — 2D (альтернативы × состояния) или 3D (× критерии); опционально `utility_expression` — строка функции полезности (y1, y2, …) |
-| **WaldResult** | Результат `wald_criterion` | `optimal_alternative`; `min_values` — минимальные ожидания по вершинам; `n_alternatives`, `n_states`, `groups` |
-| **BernoulliLaplaceResult** | Результат `bernoulli_laplace_criterion` | `optimal_alternative`; `expected_values`; `n_alternatives`, `n_states`, `groups` |
-
-Для попарного доминирования (**fishburn**, **kirkwood**) выход — тот же **CompleteUncertaintyResult** (меры = счёт доминирований, ранги, лучшая альтернатива).
 
 ---
 
